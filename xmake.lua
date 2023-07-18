@@ -12,7 +12,7 @@ target(driver_name)
     -- base setting    
     add_rules("wdk.env.kmdf", "wdk.driver")
     add_values("wdk.tracewpp.flags", "-func:TraceEvents(LEVEL,FLAGS,MSG,...)", "-func:Hexdump((LEVEL,FLAGS,MSG,...))")
-    add_files("sys/*.cpp", {rule = "wdk.tracewpp"})
+    add_files("driver/*.cpp", {rule = "wdk.tracewpp"})
 
     --  add kernel header file dir
     add_includedirs(os.dirs(kernel_header_dir))
