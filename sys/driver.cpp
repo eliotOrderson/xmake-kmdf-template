@@ -5,7 +5,7 @@ extern "C" NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT driverObject, _In_ PUNICODE_
   driverObject->DriverUnload          = DriverUnload;
   NTSTATUS status                     = STATUS_SUCCESS;
   
-  DbgInfolog("driver %s","loaded...");
+  DbgInfologln("driver %s","loaded...");
   return status;
 }
 
@@ -13,5 +13,5 @@ extern "C" NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT driverObject, _In_ PUNICODE_
 
 void DriverUnload(_In_ PDRIVER_OBJECT driverObject) {
   UNREFERENCED_PARAMETER(driverObject);
-  DbgInfolog("driver unloaded...");
+  DbgInfologln("driver unloaded...");
 }
