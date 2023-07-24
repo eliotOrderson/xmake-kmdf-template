@@ -1,3 +1,6 @@
 build
 .vscode
 .xmake
+.idea
+cmake-build-debug
+CMakeLists.txt

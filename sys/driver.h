@@ -20,13 +20,38 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter]
 "DEFAULT"=dword:0000000f
 */
-#ifdef DEBUG // The DEBUG macro is defined in the xmake file
-  #define DbgInfologln(...) DbgPrint("[INFO] " ## __VA_ARGS__);DbgPrint("\n")
-#else
-  #define DbgInfologln(...) 
-#endif
+namespace km {
+#define INFO "[INFO] "
+#define FAIL "[FAIL] "
+#define WARN "[WARN] "
+#define log(...) DbgPrint(__VA_ARGS__);DbgPrint("\n")
 
+    template<typename... T>
+    void info(T... args) {
+#ifdef DEBUG
+        DbgPrint(INFO);
+        log(args...);
+#endif
+    }
+
+    template<typename... T>
+    void fail(T... args) {
+#ifdef DEBUG
+        DbgPrint(FAIL);
+        log(args...);
+#endif
+    }
+
+    template<typename... T>
+    void warn(T... args) {
+#ifdef DEBUG
+        DbgPrint(WARN);
+        log(args...);
+#endif
+    }
+}
 
 // Function Definition
 void DriverUnload(_In_ PDRIVER_OBJECT driverObject);
+
 extern "C" NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT driverObject, _In_ PUNICODE_STRING registryPath);
