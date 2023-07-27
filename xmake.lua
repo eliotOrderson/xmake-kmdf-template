@@ -1,21 +1,21 @@
 add_rules("mode.debug", "mode.release")
 
 add_defines("DEBUG")
-set_languages("cxx17")
+set_languages("cxx20")
 
 
 local project_name           = "test"
 local target_output          = "D:/SystemCache/SystemRsourceDirectory/Desktop"
 local kernel_header_file_dir = "I:/Windows Kits/10/Include/10.0.19041.0/**"
 
-
 target(project_name)
     -- base setting
     add_rules("wdk.env.kmdf", "wdk.driver")
     add_values("wdk.tracewpp.flags", "-func:TraceEvents(LEVEL,FLAGS,MSG,...)", "-func:Hexdump((LEVEL,FLAGS,MSG,...))")
-    add_files("sys/*.cpp", {rule = "wdk.tracewpp"})
+    add_files("sys/src/*.cpp", {rule = "wdk.tracewpp"})
 
-    --  add kernel header file dir
+
+    --  add header file dir
     add_includedirs(os.dirs(kernel_header_file_dir))
 
     -- must use admin to execute the command "xmake l utils.wdk.testcert install" once

@@ -1,15 +1,26 @@
 #pragma once
 
 #include <ntddk.h>
+#include <wdf.h>
+#include <cstdio>
+
+
+namespace km{
+    template<typename... E>
+    auto format(const CHAR* fmt, E... args) {
+        static CHAR buf[512];
+        _snprintf(buf, 512, fmt, args...);
+        return buf;
+    }
 
 
 /* debugging info output
 Debugview necessary settings:
   1. capture
     1.1 Capture kernel
-    1.2 Enable Verbose kernel output 
+    1.2 Enable Verbose kernel output
     1.3 Capture Events
-  2. filter 
+  2. filter
     2.1 include string of "[*]"
 
 Display debugging info in windbg:
@@ -20,38 +31,34 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter]
 "DEFAULT"=dword:0000000f
 */
-namespace km {
 #define INFO "[INFO] "
 #define FAIL "[FAIL] "
 #define WARN "[WARN] "
-#define log(...) DbgPrint(__VA_ARGS__);DbgPrint("\n")
+
+    template<typename... T>
+    void log(const char *prefix, T... args) {
+#ifdef DEBUG
+        DbgPrint(prefix);
+        DbgPrint(args...);
+        DbgPrint("\n");
+#endif
+    }
 
     template<typename... T>
     void info(T... args) {
-#ifdef DEBUG
-        DbgPrint(INFO);
-        log(args...);
-#endif
+        log(INFO, args...);
     }
 
     template<typename... T>
     void fail(T... args) {
-#ifdef DEBUG
-        DbgPrint(FAIL);
-        log(args...);
-#endif
+        log(FAIL, args...);
     }
 
     template<typename... T>
     void warn(T... args) {
-#ifdef DEBUG
-        DbgPrint(WARN);
-        log(args...);
-#endif
+        log(WARN, args...);
     }
 }
 
-// Function Definition
-void DriverUnload(_In_ PDRIVER_OBJECT driverObject);
 
-extern "C" NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT driverObject, _In_ PUNICODE_STRING registryPath);
+
