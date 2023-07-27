@@ -1,19 +1,9 @@
 #pragma once
 
 #include <ntddk.h>
-#include <wdf.h>
-#include <cstdio>
+#include <ntstrsafe.h>
 
-
-namespace km{
-    template<typename... E>
-    auto format(const CHAR* fmt, E... args) {
-        static CHAR buf[512];
-        _snprintf(buf, 512, fmt, args...);
-        return buf;
-    }
-
-
+namespace km {
 /* debugging info output
 Debugview necessary settings:
   1. capture
@@ -57,6 +47,18 @@ Windows Registry Editor Version 5.00
     template<typename... T>
     void warn(T... args) {
         log(WARN, args...);
+    }
+
+
+    template<typename... E>
+    auto format(const CHAR *fmt, E... args) {
+        static CHAR buf[512];
+        if (RtlStringCchPrintfA(buf, 512,fmt,args...)) {
+            auto ret = "RtlStringCchPrintfA Write to buff failed";
+            fail(ret);
+            return ret;
+        }
+        return buf;
     }
 }
 

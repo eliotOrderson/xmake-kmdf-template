@@ -12,6 +12,4 @@ extern "C" NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT driverObject, _In_ PUNICODE_
 
 void DriverUnload(_In_ PDRIVER_OBJECT driverObject) {
     UNREFERENCED_PARAMETER(driverObject);
-    auto str = km::format("driver %s", "unloaded...");
-    km::info(str);
 }
